@@ -29,8 +29,15 @@ AI-Driven Optimization:
   - AI analyzes past incidents to identify patterns and improve routing strategies.
   - Suggests infrastructure improvements in areas with consistently delayed response times.
 TECHNOLOGIES USED:---- HTML CSS JS  GEO-LOCATION API  FIREBASE/MONGO DIJKSTRA ALGORITHM FOR SHORTEST PATH
-![Screenshot (52)](https://github.com/user-attachments/assets/4971aeb7-5d28-4179-8490-f64ba8602126)
-![Screenshot (53)](https://github.com/user-attachments/assets/f8411389-66c8-4361-87f9-dc87989e7afd)
-![Screenshot (54)](https://github.com/user-attachments/assets/e4803712-9337-4adc-8724-d82e17308843)
-![Screenshot (55)](https://github.com/user-attachments/assets/27f74a3f-b76d-4346-ac3a-1926c4dca108)
+![Screenshot (65)](https://github.com/user-attachments/assets/0171e34e-4dfd-4c46-a4a6-100a24e10aef)
+![Screenshot (64)](https://github.com/user-attachments/assets/b38083f0-544d-4581-8b75-d116e85b5a15)
+![Screenshot (63)](https://github.com/user-attachments/assets/d40cab1e-66e5-46a4-aded-e44b6a1b7212)
+![Screenshot (62)](https://github.com/user-attachments/assets/71b6755d-b7bc-4052-b7e3-056bf150ddcf)
+![Screenshot (61)](https://github.com/user-attachments/assets/58d770e5-0199-47be-998e-fa3340af54dd)
+![Screenshot (60)](https://github.com/user-attachments/assets/19e1e9d2-d2d2-486c-84e3-23bdcbde6d1b)
+![Screenshot (59)](https://github.com/user-attachments/assets/7458a512-895b-4ca3-a58b-8051fb15c7f3)
+![Screenshot (58)](https://github.com/user-attachments/assets/c26f4c15-8f99-43e9-8c71-f29476cff244)
+![Screenshot (57)](https://github.com/user-attachments/assets/6d55266a-f53c-4885-ab59-bb029103fa85)
+![Screenshot (56)](https://github.com/user-attachments/assets/828d591f-0ffc-4c55-91ae-5ea6a564e727)
+
 
