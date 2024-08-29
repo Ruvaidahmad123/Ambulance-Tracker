@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Ambulance - Ambulance Tracking System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #e74c3c;
+            --accent-color: #3498db;
+            --background-color: #ecf0f1;
+            --card-background: #ffffff;
+            --text-color: #34495e;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: var(--card-background);
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        #ambulanceList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .ambulance-item {
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .ambulance-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        #registrationForm {
+            display: none;
+            margin-top: 2rem;
+            background-color: #f9f9f9;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"], input[type="tel"] {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="tel"]:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+
+        #submitRegistration {
+            background-color: var(--secondary-color);
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+
+        #submitRegistration:hover {
+            background-color: #c0392b;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Register Ambulance</h1>
+        <ul id="ambulanceList"></ul>
+        <div id="registrationForm">
+            <h2>Registration Form</h2>
+            <input type="text" id="driverName" placeholder="Driver Name" required>
+            <input type="tel" id="driverPhone" placeholder="Driver Phone Number" required>
+            <button id="submitRegistration">Submit Registration</button>
+        </div>
+    </div>
+
+    <script>
+        const ambulanceList = document.getElementById('ambulanceList');
+        const registrationForm = document.getElementById('registrationForm');
+        const submitRegistration = document.getElementById('submitRegistration');
+
+        let availableAmbulances = [
+            { id: 1, name: "Ambulance 1" },
+            { id: 2, name: "Ambulance 2" },
+            { id: 3, name: "Ambulance 3" },
+            { id: 4, name: "Ambulance 4" },
+            { id: 5, name: "Ambulance 5" }
+        ];
+
+        let selectedAmbulanceId = null;
+
+        function updateAmbulanceList() {
+            ambulanceList.innerHTML = "";
+            availableAmbulances.forEach(ambulance => {
+                const li = document.createElement("li");
+                li.className = "ambulance-item";
+                li.innerHTML = `
+                    ${ambulance.name}
+                    <button onclick="selectAmbulance(${ambulance.id})">Select</button>
+                `;
+                ambulanceList.appendChild(li);
+            });
+        }
+
+        function selectAmbulance(id) {
+            selectedAmbulanceId = id;
+            registrationForm.style.display = "block";
+            document.querySelectorAll('.ambulance-item button').forEach(btn => {
+                btn.disabled = true;
+            });
+        }
+
+        submitRegistration.addEventListener('click', function() {
+            const driverName = document.getElementById('driverName').value;
+            const driverPhone = document.getElementById('driverPhone').value;
+
+            if (driverName && driverPhone && selectedAmbulanceId) {
+                const selectedAmbulance = availableAmbulances.find(amb => amb.id === selectedAmbulanceId);
+                alert(`Registration successful!\nAmbulance: ${selectedAmbulance.name}\nDriver: ${driverName}\nPhone: ${driverPhone}`);
+                
+                availableAmbulances = availableAmbulances.filter(amb => amb.id !== selectedAmbulanceId);
+                updateAmbulanceList();
+                registrationForm.style.display = "none";
+                selectedAmbulanceId = null;
+                document.getElementById('driverName').value = '';
+                document.getElementById('driverPhone').value = '';
+            } else {
+                alert('Please fill all fields and select an ambulance.');
+            }
+        });
+
+        updateAmbulanceList();
+    </script>
+</body>
+</html>

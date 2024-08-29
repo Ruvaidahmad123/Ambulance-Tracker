@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambulance Requests - Ambulance Tracking System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #e74c3c;
+            --accent-color: #3498db;
+            --background-color: #ecf0f1;
+            --card-background: #ffffff;
+            --text-color: #34495e;
+            --header-height: 70px;
+            --footer-background: #2c3e50;
+            --footer-text-color: #ecf0f1;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 0 2rem;
+            height: var(--header-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: white;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: calc(var(--header-height) + 2rem) auto 2rem;
+            padding: 0 2rem;
+            flex-grow: 1;
+        }
+
+        .requests-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .request-card {
+            background-color: var(--card-background);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .request-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .request-id {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .request-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background-color: #ffeaa7;
+            color: #d35400;
+        }
+
+        .status-assigned {
+            background-color: #81ecec;
+            color: #00b894;
+        }
+
+        .status-completed {
+            background-color: #55efc4;
+            color: #00b894;
+        }
+
+        .request-details {
+            margin-bottom: 1rem;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--secondary-color), #c0392b);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #c0392b, var(--secondary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--footer-background), #34495e);
+            color: var(--footer-text-color);
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--footer-text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem;
+            }
+
+            nav {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+        .request-card {
+            background-color: var(--card-background);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+        }
+
+        .request-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .request-card:not(:hover) {
+            filter: drop-shadow(0 0 10px rgba(255, 0, 79, 0.7));
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .popup h3 {
+            margin-top: 0;
+        }
+
+        .popup button {
+            margin-top: 10px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        #reportModal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        #reportModal .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #reportModal .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #reportModal .close:hover,
+        #reportModal .close:focus {
+            color: #000;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ambulance Tracking System</h1>
+        <nav>
+            <a href="loc.html">Map</a>
+            <a href="index.html">Requests</a>
+            <a href="hospitals.html">Hospitals</a>
+            <button>Register Ambulance</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Ambulance Requests</h2>
+        <div class="requests-list">
+            <div class="request-card">
+                <div class="request-header">
+                    <span class="request-id">Request #1234</span>
+                    <span class="request-status status-pending">Pending</span>
+                </div>
+                <div class="request-details">
+                    <p><strong>Location:</strong> Lawgate, Jalandhar India</p>
+                    <p><strong>Time:</strong> 2024-08-29 14:30:00</p>
+                    <p><strong>Description:</strong> Medical emergency, patient experiencing chest pain</p>
+                </div>
+                <div class="request-actions">
+                    <button>Assign Ambulance</button>
+                    <button>Cancel Request</button>
+                </div>
+            </div>
+
+            <div class="request-card">
+                <div class="request-header">
+                    <span class="request-id">Request #1235</span>
+                    <span class="request-status status-assigned">Assigned</span>
+                </div>
+                <div class="request-details">
+                    <p><strong>Location:</strong> Hardaspur, Phagwara India</p>
+                    <p><strong>Time:</strong> 2024-08-29 15:15:00</p>
+                    <p><strong>Description:</strong> Traffic accident, multiple injuries reported</p>
+                </div>
+                <div class="request-actions">
+                    <button>View Details</button>
+                    <button>Update Status</button>
+                </div>
+            </div>
+
+            <div class="request-card">
+                <div class="request-header">
+                    <span class="request-id">Request #1236</span>
+                    <span class="request-status status-completed">Completed</span>
+                </div>
+                <div class="request-details">
+                    <p><strong>Location:</strong> Rama Mandi, Jalandhar India </p>
+                    <p><strong>Time:</strong> 2024-08-29 13:45:00</p>
+                    <p><strong>Description:</strong> Elderly patient fall, possible hip fracture</p>
+                </div>
+                <div class="request-actions">
+                    <button>View Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="popupOverlay" class="overlay"></div>
+    <div id="popup" class="popup">
+        <h3 id="popupTitle"></h3>
+        <p id="popupMessage"></p>
+        <button onclick="closePopup()">Close</button>
+    </div>
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Ambulance Report</h2>
+            <div id="reportContent"></div>
+        </div>
+    </div>
+    <script>function viewReport(requestId) {
+        const report = `
+            <h3>Report for Request #${requestId}</h3>
+            <p><strong>Date:</strong> 2024-08-29</p>
+            <p><strong>Patient:</strong> John Doe</p>
+            <p><strong>Condition:</strong> Stable</p>
+            <p><strong>Treatment:</strong> First aid administered, transported to City Hospital</p>
+            <p><strong>Notes:</strong> Patient responded well to initial treatment. Vitals were stable throughout transport.</p>
+        `;
+        
+        document.getElementById('reportContent').innerHTML = report;
+        document.getElementById('reportModal').style.display = 'block';
+    }
+    document.querySelectorAll('.request-actions button').forEach(button => {
+        button.addEventListener('click', function() {
+            const requestId = this.closest('.request-card').querySelector('.request-id').textContent.split('#')[1];
+            const action = this.textContent.trim().toLowerCase();
+            
+            switch(action) {
+                case 'assign ambulance':
+                    assignAmbulance(requestId);
+                    break;
+                case 'cancel request':
+                    cancelRequest(requestId);
+                    break;
+                case 'view details':
+                    viewDetails(requestId);
+                    break;
+                case 'update status':
+                    updateStatus(requestId);
+                    break;
+                case 'view report':
+                    viewReport(requestId);
+                    break;
+            }
+        });
+    });
+    document.querySelectorAll('.modal .close').forEach(closeBtn => {
+        closeBtn.onclick = function() {
+            this.closest('.modal').style.display = 'none';
+        }
+    });
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    }</script>
+    <script>
+        function showPopup(title, message) {
+            document.getElementById('popupTitle').textContent = title;
+            document.getElementById('popupMessage').textContent = message;
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('popupOverlay').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('popupOverlay').style.display = 'none';
+        }
+
+        function assignAmbulance(requestId) {
+            const driverName = "John Doe";
+            const driverNumber = "+1 (555) 123-4567";
+            showPopup("Ambulance Assigned", `Ambulance has been assigned for Request #${requestId}.\nDriver: ${driverName}\nContact: ${driverNumber}`);
+        }
+
+        function cancelRequest(requestId) {
+            showPopup("Request Cancelled", `Request #${requestId} has been cancelled.`);
+        }
+
+        function viewDetails(requestId) {
+            const details = "Patient: Jane Smith\nAge: 45\nCondition: Stable\nETA: 10 minutes";
+            showPopup("Request Details", `Details for Request #${requestId}:\n${details}`);
+        }
+
+        function updateStatus(requestId) {
+            showPopup("Status Updated", `Status for Request #${requestId} has been updated to "In Progress".`);
+        }
+        document.querySelectorAll('.request-actions button').forEach(button => {
+            button.addEventListener('click', function() {
+                const requestId = this.closest('.request-card').querySelector('.request-id').textContent.split('#')[1];
+                const action = this.textContent.trim().toLowerCase();
+                
+                switch(action) {
+                    case 'assign ambulance':
+                        assignAmbulance(requestId);
+                        break;
+                    case 'cancel request':
+                        cancelRequest(requestId);
+                        break;
+                    case 'view details':
+                        viewDetails(requestId);
+                        break;
+                    case 'update status':
+                        updateStatus(requestId);
+                        break;
+                }
+            });
+        });
+    </script>
+    <div id="assignModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Ambulance Assigned</h2>
+            <p id="assignMessage"></p>
+        </div>
+    </div>
+    <script>
+        const ambulanceDrivers = [
+            { name: "John Doe", number: "123-456-7890" },
+            { name: "Jane Smith", number: "987-654-3210" },
+            { name: "Mike Johnson", number: "456-789-0123" }
+        ];
+        function getRandomDriver() {
+            return ambulanceDrivers[Math.floor(Math.random() * ambulanceDrivers.length)];
+        }
+        function showModal(modalId, message) {
+            const modal = document.getElementById(modalId);
+            const messageElement = modal.querySelector("p");
+            messageElement.textContent = message;
+            modal.style.display = "block";
+            modal.querySelector(".close").onclick = function() {
+                modal.style.display = "none";
+            }
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        }
+        document.querySelectorAll('button').forEach(button => {
+            if (button.textContent === "Assign Ambulance") {
+                button.addEventListener('click', function() {
+                    const driver = getRandomDriver();
+                    const message = `Your ambulance has been assigned. Driver: ${driver.name}, Number: ${driver.number}`;
+                    showModal("assignModal", message);
+                });
+            } else if (button.textContent === "Cancel Request") {
+                button.addEventListener('click', function() {
+                    const message = "Your ambulance request has been cancelled.";
+                    showModal("cancelModal", message);
+                });
+            }
+        });
+    </script>
+
+    <div id="cancelModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Request Cancelled</h2>
+            <p id="cancelMessage"></p>
+        </div>
+    </div>
+</body>
+</html>
